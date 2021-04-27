@@ -24,16 +24,21 @@ export const useFetch = (url) => {
     fetch(url)
       .then((resp) => resp.json())
       .then((data) => {
-        if (isMounted) {
+        if (isMounted.current) {
           //proteger el error al desapecer componebte
           setState({
             data,
             loading: false,
             error: null,
           });
-        } else {
-          console.log('no montado');
         }
+      })
+      .catch(() => {
+        setState({
+          data: null,
+          loading: false,
+          error: 'No se pudo cargar la info',
+        });
       });
   }, [url]);
 
